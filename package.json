@@ -1,0 +1,19 @@
+{
+  "name": "crazysmm-local-console",
+  "version": "1.0.0",
+  "description": "Local browser console for CrazySMM batch planning, ordering, and order status checks.",
+  "private": true,
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MangoLabsStudio/crazysmm-local-console.git"
+  },
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "check": "node --check server.js && node --check public/app.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

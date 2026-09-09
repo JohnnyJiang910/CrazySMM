@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/api/traffic-growth/simulate",
+    "body": {
+      "modelId": "M02",
+      "horizonDays": 3,
+      "targetViews": 100000,
+      "startAt": "2026-07-10T09:00:00.000Z"
+    }
+  },
+  "responseShape": {
+    "version": "traffic_growth_model_v1",
+    "intervalMinutes": 30,
+    "model": {
+      "id": "M02",
+      "name": "自然标准爬升",
+      "family": "自然扩散"
+    },
+    "horizonDays": 3,
+    "targetViews": 100000,
+    "points": [
+      {
+        "slot": 1,
+        "hourStart": 0,
+        "hourEnd": 0.5,
+        "plannedAt": "2026-07-10T09:30:00.000Z",
+        "incrementShare": 0.00001,
+        "cumulativeShare": 0.00001,
+        "incrementViews": 1,
+        "cumulativeViews": 1
+      }
+    ]
+  }
+}

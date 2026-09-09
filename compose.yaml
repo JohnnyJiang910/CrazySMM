@@ -1,0 +1,16 @@
+services:
+  console:
+    build: .
+    init: true
+    restart: unless-stopped
+    ports:
+      - "${PORT:-5178}:${PORT:-5178}"
+    environment:
+      HOST: 0.0.0.0
+      PORT: ${PORT:-5178}
+      CRAZYSMM_API_URL: ${CRAZYSMM_API_URL:-https://crazysmm.com/api/v2}
+      CRAZYSMM_API_KEY: ${CRAZYSMM_API_KEY:-}
+      GROWTH_MODEL_CSV: ${GROWTH_MODEL_CSV:-/app/examples/traffic_growth_model_points.sample.csv}
+    volumes:
+      - ./work:/app/work
+      - ./outputs:/app/outputs

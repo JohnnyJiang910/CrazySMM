@@ -1,0 +1,594 @@
+{
+  "version": "traffic_growth_model_v1",
+  "generatedAt": "2026-07-10T07:11:07.856Z",
+  "intervalMinutes": 30,
+  "supportedHorizonDays": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "modelCount": 32,
+  "pointCount": 43008,
+  "models": [
+    {
+      "id": "M01",
+      "key": "natural_fast",
+      "name": "自然快爬升",
+      "family": "自然扩散",
+      "useCase": "所选周期前段快速起量，后面进入平台残量。",
+      "timingBasis": "relative_to_selected_horizon",
+      "peakWindows": {
+        "1": "6.5-7h",
+        "3": "20-20.5h",
+        "7": "47-47.5h"
+      },
+      "peakHalfHourViewsAt100k": {
+        "1": 6575,
+        "3": 2241,
+        "7": 967
+      }
+    },
+    {
+      "id": "M02",
+      "key": "natural_standard",
+      "name": "自然标准爬升",
+      "family": "自然扩散",
+      "useCase": "健康的中腰部爆款，在所选周期前半段完成主增长。",
+      "timingBasis": "relative_to_selected_horizon",
+      "peakWindows": {
+        "1": "8.5-9h",
+        "3": "26-26.5h",
+        "7": "60.5-61h"
+      },
+      "peakHalfHourViewsAt100k": {
+        "1": 5561,
+        "3": 1888,
+        "7": 812
+      }
+    },
+    {
+      "id": "M03",
+      "key": "natural_slow_burn",
+      "name": "自然慢热",
+      "family": "自然扩散",
+      "useCase": "早期不猛，所选周期中后段持续爬升。",
+      "timingBasis": "relative_to_selected_horizon",
+      "peakWindows": {
+        "1": "14-14.5h",
+        "3": "42-42.5h",
+        "7": "97.5-98h"
+      },
+      "peakHalfHourViewsAt100k": {
+        "1": 5722,
+        "3": 1928,
+        "7": 826
+      }
+    },
+    {
+      "id": "M04",
+      "key": "natural_long_tail",
+      "name": "自然长尾",
+      "family": "自然扩散",
+      "useCase": "没有明显爆点，靠持续小流量池推荐堆满所选周期。",
+      "timingBasis": "relative_to_selected_horizon",
+      "peakWindows": {
+        "1": "15-15.5h",
+        "3": "44.5-45h",
+        "7": "104-104.5h"
+      },
+      "peakHalfHourViewsAt100k": {
+        "1": 5081,
+        "3": 1695,
+        "7": 729
+      }
+    },
+    {
+      "id": "M05",
+      "key": "front_loaded_sharp",
+      "name": "前爆急衰",
+      "family": "早爆后缓",
+      "useCase": "所选周期一开始强起量，之后快速掉速。",
+      "timingBasis": "relative_to_selected_horizon",
+      "peakWindows": {
+        "1": "3.5-4h",
+        "3": "11-11.5h",
+        "7": "25-25.5h"
+      },
+      "peakHalfHourViewsAt100k": {
+        "1": 7088,
+        "3": 2419,
+        "7": 1046
+      }
+    },
+    {
+      "id": "M06",
+      "key": "front_loaded_soft",
+      "name": "前爆缓衰",
+      "family": "早爆后缓",
+      "useCase": "前期强，但所选周期后段仍有推荐流补量。",
+      "timingBasis": "relative_to_selected_horizon",
+      "peakWindows": {
+        "1": "5-5.5h",
+        "3": "14.5-15h",
+        "7": "33.5-34h"
+      },
+      "peakHalfHourViewsAt100k": {
+        "1": 5248,
+        "3": 1773,
+        "7": 763
+      }
+    },
+    {
+      "id": "M07",
+      "key": "opening_spike_short_tail",
+      "name": "开局尖峰短尾",
+      "family": "早爆后缓",
+      "useCase": "发布即爆，但后续没有新增入口。",
+      "timingBasis": "relative_to_selected_horizon",
+      "peakWindows": {
+        "1": "0.5-1h",
+        "3": "1.5-2h",
+        "7": "4-4.5h"
+      },
+      "peakHalfHourViewsAt100k": {
+        "1": 33819,
+        "3": 11664,
+        "7": 5014
+      }
+    },
+    {
+      "id": "M08",
+      "key": "opening_spike_long_tail",
+      "name": "开局尖峰长尾",
+      "family": "早爆后缓",
+      "useCase": "开局尖峰后仍被反复推荐，尾部比短尾更厚。",
+      "timingBasis": "relative_to_selected_horizon",
+      "peakWindows": {
+        "1": "0.5-1h",
+        "3": "2.5-3h",
+        "7": "6.5-7h"
+      },
+      "peakHalfHourViewsAt100k": {
+        "1": 14651,
+        "3": 5009,
+        "7": 2152
+      }
+    },
+    {
+      "id": "M09",
+      "key": "delayed_takeoff_early",
+      "name": "延迟起飞-前段",
+      "family": "慢热/后爆",
+      "useCase": "所选周期约 20% 处开始真正起飞。",
+      "timingBasis": "relative_to_selected_horizon",
+      "peakWindows": {
+        "1": "4.5-5h",
+        "3": "14-14.5h",
+        "7": "33-33.5h"
+      },
+      "peakHalfHourViewsAt100k": {
+        "1": 9864,
+        "3": 3305,
+        "7": 1419
+      }
+    },
+    {
+      "id": "M10",
+      "key": "delayed_takeoff_mid",
+      "name": "延迟起飞-中段",
+      "family": "慢热/后爆",
+      "useCase": "前半段偏冷，所选周期中段被新入口带起。",
+      "timingBasis": "relative_to_selected_horizon",
+      "peakWindows": {
+        "1": "10.5-11h",
+        "3": "32-32.5h",
+        "7": "75.5-76h"
+      },
+      "peakHalfHourViewsAt100k": {
+        "1": 8036,
+        "3": 2679,
+        "7": 1146
+      }
+    },
+    {
+      "id": "M11",
+      "key": "delayed_takeoff_late",
+      "name": "延迟起飞-后段",
+      "family": "慢热/后爆",
+      "useCase": "所选周期后半段才被发现，前期低速。",
+      "timingBasis": "relative_to_selected_horizon",
+      "peakWindows": {
+        "1": "15.5-16h",
+        "3": "46.5-47h",
+        "7": "108.5-109h"
+      },
+      "peakHalfHourViewsAt100k": {
+        "1": 7133,
+        "3": 2394,
+        "7": 1027
+      }
+    },
+    {
+      "id": "M12",
+      "key": "delayed_takeoff_tail",
+      "name": "延迟起飞-尾段",
+      "family": "慢热/后爆",
+      "useCase": "所选周期最后三分之一才开始明显增长。",
+      "timingBasis": "relative_to_selected_horizon",
+      "peakWindows": {
+        "1": "18.5-19h",
+        "3": "56-56.5h",
+        "7": "130.5-131h"
+      },
+      "peakHalfHourViewsAt100k": {
+        "1": 7074,
+        "3": 2371,
+        "7": 1015
+      }
+    },
+    {
+      "id": "M13",
+      "key": "kol_boost_early",
+      "name": "KOL 早期放大",
+      "family": "外部放大",
+      "useCase": "早期被大号转发/引用，出现明显阶跃。",
+      "timingBasis": "relative_to_selected_horizon",
+      "peakWindows": {
+        "1": "1.5-2h",
+        "3": "5.5-6h",
+        "7": "13-13.5h"
+      },
+      "peakHalfHourViewsAt100k": {
+        "1": 14780,
+        "3": 4999,
+        "7": 2137
+      }
+    },
+    {
+      "id": "M14",
+      "key": "kol_boost_front_mid",
+      "name": "KOL 前中期放大",
+      "family": "外部放大",
+      "useCase": "自然起步后被大号带动，所选周期前中段跳涨。",
+      "timingBasis": "relative_to_selected_horizon",
+      "peakWindows": {
+        "1": "5-5.5h",
+        "3": "15.5-16h",
+        "7": "36.5-37h"
+      },
+      "peakHalfHourViewsAt100k": {
+        "1": 10824,
+        "3": 3626,
+        "7": 1553
+      }
+    },
+    {
+      "id": "M15",
+      "key": "kol_boost_mid",
+      "name": "KOL 中期放大",
+      "family": "外部放大",
+      "useCase": "所选周期中段被大号/媒体号放大。",
+      "timingBasis": "relative_to_selected_horizon",
+      "peakWindows": {
+        "1": "10.5-11h",
+        "3": "32-32.5h",
+        "7": "75.5-76h"
+      },
+      "peakHalfHourViewsAt100k": {
+        "1": 8202,
+        "3": 2734,
+        "7": 1170
+      }
+    },
+    {
+      "id": "M16",
+      "key": "kol_boost_late",
+      "name": "KOL 后期放大",
+      "family": "外部放大",
+      "useCase": "所选周期后段被大号捡起，适合后爆型引用传播。",
+      "timingBasis": "relative_to_selected_horizon",
+      "peakWindows": {
+        "1": "17-17.5h",
+        "3": "51.5-52h",
+        "7": "120.5-121h"
+      },
+      "peakHalfHourViewsAt100k": {
+        "1": 8568,
+        "3": 2866,
+        "7": 1228
+      }
+    },
+    {
+      "id": "M17",
+      "key": "quote_reply_early",
+      "name": "Quote/Reply 早期导流",
+      "family": "Quote Reply 导流",
+      "useCase": "引用/回复早期带来导流，曲线不是纯自然爬升。",
+      "timingBasis": "relative_to_selected_horizon",
+      "peakWindows": {
+        "1": "4.5-5h",
+        "3": "13.5-14h",
+        "7": "31.5-32h"
+      },
+      "peakHalfHourViewsAt100k": {
+        "1": 5880,
+        "3": 1974,
+        "7": 848
+      }
+    },
+    {
+      "id": "M18",
+      "key": "quote_reply_mid_chain",
+      "name": "Quote/Reply 中段串联",
+      "family": "Quote Reply 导流",
+      "useCase": "多个引用/回复在所选周期中段串联，增长像连续接力。",
+      "timingBasis": "relative_to_selected_horizon",
+      "peakWindows": {
+        "1": "8.5-9h",
+        "3": "25.5-26h",
+        "7": "59.5-60h"
+      },
+      "peakHalfHourViewsAt100k": {
+        "1": 4564,
+        "3": 1516,
+        "7": 649
+      }
+    },
+    {
+      "id": "M19",
+      "key": "reply_fight_sustained",
+      "name": "回复争议持续导流",
+      "family": "Quote Reply 导流",
+      "useCase": "评论/引用争议持续产生互动，增长窗口较宽。",
+      "timingBasis": "relative_to_selected_horizon",
+      "peakWindows": {
+        "1": "6-6.5h",
+        "3": "18-18.5h",
+        "7": "41.5-42h"
+      },
+      "peakHalfHourViewsAt100k": {
+        "1": 3548,
+        "3": 1187,
+        "7": 509
+      }
+    },
+    {
+      "id": "M20",
+      "key": "quote_cluster_late",
+      "name": "晚段引用簇",
+      "family": "Quote Reply 导流",
+      "useCase": "所选周期后段出现引用簇，尾部明显翘起。",
+      "timingBasis": "relative_to_selected_horizon",
+      "peakWindows": {
+        "1": "18.5-19h",
+        "3": "55.5-56h",
+        "7": "129.5-130h"
+      },
+      "peakHalfHourViewsAt100k": {
+        "1": 4558,
+        "3": 1525,
+        "7": 653
+      }
+    },
+    {
+      "id": "M21",
+      "key": "two_wave",
+      "name": "双波次接力",
+      "family": "多波次",
+      "useCase": "前段一波，中段一波，适合普通跨圈层传播。",
+      "timingBasis": "relative_to_selected_horizon",
+      "peakWindows": {
+        "1": "4-4.5h",
+        "3": "13-13.5h",
+        "7": "30-30.5h"
+      },
+      "peakHalfHourViewsAt100k": {
+        "1": 4387,
+        "3": 1468,
+        "7": 628
+      }
+    },
+    {
+      "id": "M22",
+      "key": "three_wave",
+      "name": "三波次接力",
+      "family": "多波次",
+      "useCase": "前段、中段、后段多轮传播源接力。",
+      "timingBasis": "relative_to_selected_horizon",
+      "peakWindows": {
+        "1": "10-10.5h",
+        "3": "30-30.5h",
+        "7": "70-70.5h"
+      },
+      "peakHalfHourViewsAt100k": {
+        "1": 3645,
+        "3": 1221,
+        "7": 523
+      }
+    },
+    {
+      "id": "M23",
+      "key": "creator_kol_media",
+      "name": "作者-KOL-媒体三级",
+      "family": "多波次",
+      "useCase": "作者原始扩散、KOL 放大、媒体/社区再分发依次发生。",
+      "timingBasis": "relative_to_selected_horizon",
+      "peakWindows": {
+        "1": "6.5-7h",
+        "3": "20-20.5h",
+        "7": "46.5-47h"
+      },
+      "peakHalfHourViewsAt100k": {
+        "1": 4112,
+        "3": 1365,
+        "7": 584
+      }
+    },
+    {
+      "id": "M24",
+      "key": "timezone_relay",
+      "name": "跨时区接力",
+      "family": "多波次",
+      "useCase": "不同地区活跃时间接力，所选周期内不断出现小峰。",
+      "timingBasis": "relative_to_selected_horizon",
+      "peakWindows": {
+        "1": "9-9.5h",
+        "3": "28-28.5h",
+        "7": "65-65.5h"
+      },
+      "peakHalfHourViewsAt100k": {
+        "1": 3056,
+        "3": 1025,
+        "7": 439
+      }
+    },
+    {
+      "id": "M25",
+      "key": "event_flash",
+      "name": "事件瞬爆",
+      "family": "事件/争议",
+      "useCase": "短事件或热点截图，在所选周期早期冲高后快速衰减。",
+      "timingBasis": "relative_to_selected_horizon",
+      "peakWindows": {
+        "1": "1-1.5h",
+        "3": "4-4.5h",
+        "7": "10-10.5h"
+      },
+      "peakHalfHourViewsAt100k": {
+        "1": 21284,
+        "3": 7267,
+        "7": 3116
+      }
+    },
+    {
+      "id": "M26",
+      "key": "controversy_sustained",
+      "name": "争议持续发酵",
+      "family": "事件/争议",
+      "useCase": "争议话题在评论/引用里持续发酵，增长横跨所选周期。",
+      "timingBasis": "relative_to_selected_horizon",
+      "peakWindows": {
+        "1": "5.5-6h",
+        "3": "17-17.5h",
+        "7": "40-40.5h"
+      },
+      "peakHalfHourViewsAt100k": {
+        "1": 3096,
+        "3": 1035,
+        "7": 443
+      }
+    },
+    {
+      "id": "M27",
+      "key": "breaking_news_decay",
+      "name": "突发新闻衰减",
+      "family": "事件/争议",
+      "useCase": "新闻类内容迅速起量，之后被后续新闻替代。",
+      "timingBasis": "relative_to_selected_horizon",
+      "peakWindows": {
+        "1": "4-4.5h",
+        "3": "11.5-12h",
+        "7": "27-27.5h"
+      },
+      "peakHalfHourViewsAt100k": {
+        "1": 6528,
+        "3": 2230,
+        "7": 962
+      }
+    },
+    {
+      "id": "M28",
+      "key": "meme_short_life",
+      "name": "梗图短生命周期",
+      "family": "事件/争议",
+      "useCase": "娱乐/梗图类，爆得快，审美疲劳也快。",
+      "timingBasis": "relative_to_selected_horizon",
+      "peakWindows": {
+        "1": "1-1.5h",
+        "3": "4-4.5h",
+        "7": "10-10.5h"
+      },
+      "peakHalfHourViewsAt100k": {
+        "1": 11634,
+        "3": 3952,
+        "7": 1695
+      }
+    },
+    {
+      "id": "M29",
+      "key": "plateau_tail_early",
+      "name": "前期平台长尾",
+      "family": "平台长尾",
+      "useCase": "所选周期前段完成主增长，之后以平台残量继续补。",
+      "timingBasis": "relative_to_selected_horizon",
+      "peakWindows": {
+        "1": "8-8.5h",
+        "3": "24.5-25h",
+        "7": "57-57.5h"
+      },
+      "peakHalfHourViewsAt100k": {
+        "1": 4885,
+        "3": 1655,
+        "7": 711
+      }
+    },
+    {
+      "id": "M30",
+      "key": "plateau_tail_mid",
+      "name": "中期平台长尾",
+      "family": "平台长尾",
+      "useCase": "所选周期中段完成主增长，后半段慢慢补量。",
+      "timingBasis": "relative_to_selected_horizon",
+      "peakWindows": {
+        "1": "14-14.5h",
+        "3": "42-42.5h",
+        "7": "97.5-98h"
+      },
+      "peakHalfHourViewsAt100k": {
+        "1": 5845,
+        "3": 1968,
+        "7": 843
+      }
+    },
+    {
+      "id": "M31",
+      "key": "resurface_late",
+      "name": "后段再浮现",
+      "family": "平台长尾",
+      "useCase": "前半段正常，后段又被推荐或被新社区发现。",
+      "timingBasis": "relative_to_selected_horizon",
+      "peakWindows": {
+        "1": "17-17.5h",
+        "3": "51.5-52h",
+        "7": "120.5-121h"
+      },
+      "peakHalfHourViewsAt100k": {
+        "1": 7078,
+        "3": 2368,
+        "7": 1015
+      }
+    },
+    {
+      "id": "M32",
+      "key": "evergreen",
+      "name": "常青慢尾",
+      "family": "平台长尾",
+      "useCase": "教程/观点/资料型内容，没有强峰值，但持续被搜索或推荐。",
+      "timingBasis": "relative_to_selected_horizon",
+      "peakWindows": {
+        "1": "15-15.5h",
+        "3": "44.5-45h",
+        "7": "104-104.5h"
+      },
+      "peakHalfHourViewsAt100k": {
+        "1": 4080,
+        "3": 1364,
+        "7": 586
+      }
+    }
+  ]
+}

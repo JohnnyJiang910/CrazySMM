@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CrazySMM Local Console</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <span class="brand-mark">CS</span>
+          <div>
+            <h1>CrazySMM Console</h1>
+            <p>本地批量核对台</p>
+          </div>
+        </div>
+        <nav>
+          <button class="nav-link active" data-view="batch">批量清单</button>
+          <button class="nav-link" data-view="model">增长模型</button>
+          <button class="nav-link" data-view="batch-runner">批量下单</button>
+          <button class="nav-link" data-view="api">API 状态</button>
+          <button class="nav-link" data-view="orders">订单查询</button>
+        </nav>
+      </aside>
+
+      <main>
+        <section class="top-status">
+          <div>
+            <strong id="keyState">API key 未配置</strong>
+            <span id="apiUrl"></span>
+          </div>
+          <div class="status-note" id="globalStatus">准备就绪</div>
+        </section>
+
+        <section class="view active" data-view-panel="batch">
+          <div class="workspace">
+            <div class="panel input-panel">
+              <div class="panel-head">
+                <h2>批量粘贴</h2>
+                <div class="hint">先选 CrazySMM 服务，再粘贴：推文链接 | 数量；旧三列会自动替换第一列服务码</div>
+              </div>
+              <div class="service-picker">
+                <div class="service-row">
+                  <label>
+                    服务搜索
+                    <input id="serviceSearchInput" type="search" placeholder="搜索服务名、分类、ID" autocomplete="off" />
+                  </label>
+                  <label class="service-select-label">
+                    CrazySMM 服务
+                    <select id="serviceSelect">
+                      <option value="">先拉取服务列表</option>
+                    </select>
+                  </label>
+                  <button id="loadServicesBtn" class="secondary">拉取服务</button>
+                </div>
+                <div class="hint" id="selectedServiceInfo">选择服务后，可以直接粘贴：推文链接 | 数量</div>
+              </div>
+              <textarea id="bulkInput" spellcheck="false">https://x.com/iam_elias1/status/2074797317753118953 | 20660</textarea>
+              <div class="button-row">
+                <button id="parseBtn">解析</button>
+                <button id="translateBtn">翻译成三列</button>
+                <button id="clearBtn" class="secondary">清空</button>
+                <button id="sampleBtn" class="secondary">示例</button>
+              </div>
+            </div>
+
+            <div class="panel stats-panel">
+              <div class="metric">
+                <span>有效行</span>
+                <strong id="validCount">0</strong>
+              </div>
+              <div class="metric">
+                <span>错误行</span>
+                <strong id="errorCount">0</strong>
+              </div>
+              <div class="metric">
+                <span>总数量</span>
+                <strong id="quantityTotal">0</strong>
+              </div>
+              <div class="metric">
+                <span>服务数</span>
+                <strong id="serviceCount">0</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel result-panel">
+            <div class="panel-head">
+              <h2>核对结果</h2>
+              <div class="button-row compact">
+                <button id="copyPipeBtn" class="secondary">复制三列格式</button>
+                <button id="copyCsvBtn" class="secondary">复制 CSV</button>
+                <button id="copyJsonBtn" class="secondary">复制 JSON</button>
+                <button id="copyPayloadBtn" class="secondary">复制 API Payload</button>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>服务ID</th>
+                    <th>链接</th>
+                    <th>数量</th>
+                    <th>状态</th>
+                  </tr>
+                </thead>
+                <tbody id="resultBody">
+                  <tr>
+                    <td colspan="5" class="empty">还没解析内容</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="view" data-view-panel="model">
+          <div class="panel model-panel">
+            <div class="panel-head">
+              <div>
+                <h2>增长模型</h2>
+                <div class="hint" id="modelHint">正在读取模型</div>
+              </div>
+              <div class="model-controls">
+                <label>
+                  模型
+                  <select id="modelSelect"></select>
+                </label>
+                <label>
+                  周期
+                  <select id="horizonSelect"></select>
+                </label>
+                <label>
+                  最低量
+                  <input id="minQuantityInput" type="number" min="0" value="100" />
+                </label>
+                <label class="random-model-label">
+                  <input type="checkbox" id="randomModelToggle" />
+                  <span>随机分配</span>
+                </label>
+                <button id="buildPlanBtn">按模型拆分</button>
+                <button id="commitPlanBtn" class="secondary" disabled>确认并生成批次</button>
+              </div>
+            </div>
+            <div id="modelCheckboxList" class="model-checkbox-list" style="display:none;"></div>
+            <div class="model-summary">
+              <div class="metric compact-metric">
+                <span>输入有效行</span>
+                <strong id="modelInputCount">0</strong>
+              </div>
+              <div class="metric compact-metric">
+                <span>模型槽位</span>
+                <strong id="slotCount">0</strong>
+              </div>
+              <div class="metric compact-metric">
+                <span>拆分行数</span>
+                <strong id="planRowCount">0</strong>
+              </div>
+              <div class="metric compact-metric">
+                <span>计划总量</span>
+                <strong id="planTotal">0</strong>
+              </div>
+              <div class="metric compact-metric">
+                <span>校验</span>
+                <strong id="planCheck">-</strong>
+              </div>
+            </div>
+            <div class="button-row">
+              <button id="copyPlanCsvBtn" class="secondary">复制拆分 CSV</button>
+              <button id="copyPlanJsonBtn" class="secondary">复制拆分 JSON</button>
+              <button id="copyPlanPipeBtn" class="secondary">复制三列格式</button>
+            </div>
+            <div class="table-wrap model-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>源行</th>
+                    <th>服务ID</th>
+                    <th>链接</th>
+                    <th>Day</th>
+                    <th>时间</th>
+                    <th>阶段</th>
+                    <th>比例</th>
+                    <th>数量</th>
+                  </tr>
+                </thead>
+                <tbody id="planBody">
+                  <tr>
+                    <td colspan="8" class="empty">还没有生成模型拆分</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="view" data-view-panel="api">
+          <div class="workspace">
+            <div class="panel">
+              <div class="panel-head">
+                <h2>API 状态</h2>
+                <div class="hint">本地后台、Key、余额、服务列表</div>
+              </div>
+              <div class="form-stack">
+                <div class="status-grid">
+                  <div class="metric compact-metric">
+                    <span>后台</span>
+                    <strong id="backendState">-</strong>
+                  </div>
+                  <div class="metric compact-metric">
+                    <span>模型数</span>
+                    <strong id="healthModelCount">0</strong>
+                  </div>
+                </div>
+                <label>
+                  API Key
+                  <input id="apiKeyInput" type="password" placeholder="CRAZYSMM_API_KEY" autocomplete="off" />
+                </label>
+                <div class="button-row flush">
+                  <button id="refreshHealthBtn" class="secondary">刷新状态</button>
+                  <button id="saveKeyBtn">保存 Key</button>
+                  <button id="balanceBtn" class="secondary">查余额</button>
+                  <button id="servicesBtn" class="secondary">拉服务</button>
+                </div>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="panel-head">
+                <h2>API 返回</h2>
+                <div class="hint" id="apiLastAction">等待操作</div>
+              </div>
+              <pre id="apiOutput">{}</pre>
+            </div>
+          </div>
+        </section>
+
+        <section class="view" data-view-panel="batch-runner">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>批量下单</h2>
+                <div class="hint" id="batchRunnerHint">批量下单（支持 dry-run 预览 / 正式下单）</div>
+              </div>
+              <div class="runner-controls">
+                <label>
+                  间隔秒
+                  <input id="batchIntervalInput" type="number" min="1" value="1800" />
+                </label>
+                <button id="updateIntervalBtn" class="secondary">修改间隔</button>
+                <button id="refreshBatchBtn" class="secondary">刷新</button>
+                <button id="startAllBatchRunnerBtn">启动全部</button>
+                <button id="stopAllBatchRunnerBtn" class="secondary">停止全部</button>
+              </div>
+            </div>
+            <div class="batch-overview" id="batchProjectGrid">
+              <div class="empty">还没有批次项目</div>
+            </div>
+          </div>
+
+          <div class="workspace">
+            <div class="panel">
+              <div class="panel-head">
+                <div>
+                  <h2 id="batchSelectedName">项目详情</h2>
+                  <div class="hint" id="batchTaskStats">选择一个项目查看任务</div>
+                </div>
+                <div class="runner-controls">
+                  <label>
+                    当前项目
+                    <select id="batchDirSelect">
+                      <option value="">先刷新批次目录</option>
+                    </select>
+                  </label>
+                  <button id="startBatchRunnerBtn">启动项目</button>
+                  <button id="stopBatchRunnerBtn" class="secondary">停止项目</button>
+                </div>
+              </div>
+              <div class="form-stack">
+                <label class="mode-switch-label">
+                  <span>模式</span>
+                  <div class="toggle-switch">
+                    <input type="checkbox" id="batchModeToggle" />
+                    <span class="toggle-slider"></span>
+                  </div>
+                  <span id="batchModeLabel" class="mode-text dry">dry-run</span>
+                </label>
+                <div id="batchRunnerStatus" class="status-indicator stopped">未启动</div>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>文件</th>
+                      <th>标签</th>
+                      <th>行数</th>
+                      <th>数量</th>
+                      <th>订单号</th>
+                      <th>状态</th>
+                    </tr>
+                  </thead>
+                  <tbody id="batchTaskBody">
+                    <tr>
+                      <td colspan="7" class="empty">还没有批次任务</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="panel-head">
+                <h2>项目日志</h2>
+                <div class="hint">当前批次会写入该项目目录的 current_batch.txt</div>
+              </div>
+              <div id="batchLogContainer" class="log-box"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="view" data-view-panel="orders">
+          <div class="workspace">
+            <div class="panel">
+              <div class="panel-head">
+                <h2>订单状态</h2>
+                <div class="hint">一行一个订单 ID，或用逗号分隔</div>
+              </div>
+              <textarea id="orderInput" class="small-textarea" spellcheck="false"></textarea>
+              <div class="button-row">
+                <button id="statusBtn">批量查询</button>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="panel-head">
+                <h2>查询返回</h2>
+                <div class="hint" id="orderLastAction">等待操作</div>
+              </div>
+              <pre id="orderOutput">{}</pre>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="/app.js?v=20260710-7"></script>
+  </body>
+</html>

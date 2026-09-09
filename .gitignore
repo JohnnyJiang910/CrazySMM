@@ -1,0 +1,20 @@
+# Chrome profile (huge)
+work/chrome-latest-x-profile/
+
+# Node
+node_modules/
+npm-debug.log*
+*.log
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Local secrets, business data, and generated batch data
+/work/
+/outputs/
+
+# OS files
+.DS_Store
+Thumbs.db
